@@ -9,6 +9,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import we.processUtils.ProcessRunner;
 
 import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 public class GitUtils {
@@ -23,6 +24,8 @@ public class GitUtils {
 
     @SneakyThrows
     public static void cloneOrUpdate(String url, String username, String password, File directory) {
+        directory = new File(directory.getCanonicalPath());
+
         if (directory.exists()) {
             try {
                 updateWorkingTree(directory);
@@ -47,19 +50,7 @@ public class GitUtils {
     @SneakyThrows
     public static void forceClone(String url, String username, String password, File directory) {
         directory = new File(directory.getCanonicalPath());
-
-        if (directory.exists()) {
-            if (!FileUtils.deleteQuietly(directory)) {
-                throw new RuntimeException((
-                        "Could not delete directory %s. It must be blocked by a process. " +
-                                "Restarting the IDE sometimes helps"
-                ).formatted(directory));
-            }
-        }
-        if (!directory.getParentFile().mkdirs()) {
-            throw new RuntimeException("Could not create directory ");
-        }
-
+        deleteFileIfExists(directory);
         clone(url, username, password, directory);
     }
 
@@ -70,7 +61,7 @@ public class GitUtils {
         File parentDirectory = directory.getParentFile();
         String directoryName = directory.getName();
         //noinspection ResultOfMethodCallIgnored
-        directory.mkdirs();
+        parentDirectory.mkdirs();
         ProcessRunner.runProcess(parentDirectory, "git", "clone", url, directoryName);
     }
 
@@ -98,5 +89,19 @@ public class GitUtils {
     private static void updateWorkingTree(File directory) {
         ProcessRunner.runProcess(directory, "git", "fetch");
         ProcessRunner.runProcess(directory, "git", "pull");
+    }
+
+    private static void deleteFileIfExists(File directory) {
+        if (directory.exists()) {
+            try {
+                FileUtils.forceDelete(directory);
+            } catch (IOException e) {
+                String message = (
+                        "Could not delete %s. It must be blocked by a process. " +
+                                "Restarting the IDE may help"
+                ).formatted(directory);
+                throw new RuntimeException(message, e);
+            }
+        }
     }
 }
