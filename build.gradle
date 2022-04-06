@@ -9,6 +9,10 @@ version = '001'
 
 sourceCompatibility = '17'
 
+java {
+    withSourcesJar()
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -54,7 +58,7 @@ dependencyManagement {
 
 publishing {
     publications {
-        register('jar', MavenPublication) { MavenPublication mavenPublication ->
+        register('java', MavenPublication) { MavenPublication mavenPublication ->
             // Плагин java (на базе которого сделан плагин java-library, который мы здесь используем) уже подготовил нам комплект для публикации
             // Такие заготовленные комплекты для публикации - это называется компоненты
             from components.java
