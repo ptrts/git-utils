@@ -54,7 +54,15 @@ public class GitUtils {
         clone(url, username, password, directory);
     }
 
-    private static void clone(String url, String username, String password, File directory) {
+    public static void clone(String url, File directory) {
+        clone(url, null, null, directory);
+    }
+
+    public static void clone(String url, String accessToken, File directory) {
+        clone(url, accessToken, null, directory);
+    }
+
+    public static void clone(String url, String username, String password, File directory) {
         if (StringUtils.isNotBlank(username)) {
             url = addCredentialsToGitRepositoryUrl(url, username, password);
         }
