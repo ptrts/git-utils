@@ -46,8 +46,8 @@ dependencies {
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.google.guava:guava:31.1-jre'
 
-    // Logback
-    implementation 'ch.qos.logback:logback-classic'
+    // Slf4j
+    implementation 'org.slf4j:slf4j-api'
 }
 
 dependencyManagement {
