@@ -1,4 +1,4 @@
-package we.gitUtils;
+package org.taruts.gitUtils;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import we.processUtils.ProcessRunner;
+import org.taruts.processUtils.ProcessRunner;
 
 import java.io.File;
 import java.io.IOException;
